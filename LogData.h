@@ -3,22 +3,29 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <stdexcept>      // std::out_of_range
 #include <map>
 #include <utility>
-class LogData {
-
+class LogData 
+{
 public:
-	LogData(string);
+	LogData(string unFileName);
 	LogData(const LogData&);
 	~LogData();
 	
-	void Insert_Link(string , string);
-	void Insert_Linkref(string);
+	void Insert_Cib(string cible);
+	void Insert_CibRef(string cible , string ref);
+	void Affiche_data();
 private:
-	typedef map<string , int> DataRef; //string : URL ref
+	typedef map<string , int> DataRef; //string : URL cib, int : hits
 	DataRef dataRef;
-	typedef map<string , pair<DataRef , int>> LogApache; //string : URL cible
-	LogApache logApache;
+	typedef map<string , pair<DataRef , int>> DataCibRef; 
+	// string : URL cible, string de DataRef : URL ref  
+	// int de DataRef : nombre acces de ref->cib
+	// int : hits
+	// 
+	DataCibRef dataCibRef;
 	string fileName;
 };
 
