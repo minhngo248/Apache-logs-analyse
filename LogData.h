@@ -6,7 +6,8 @@
 #include <fstream>
 #include <stdexcept>      // std::out_of_range
 #include <map>
-#include <utility>
+#include <vector>
+#include <iterator>
 class LogData 
 {
 public:
@@ -16,14 +17,16 @@ public:
 	
 	void Insert_Cib(string cible);
 	void Insert_CibRef(string cible , string ref);
-	void Affiche_data();
+	void Affiche_data(vector<string> & options , string fileDot = "");
+	void Test_affiche_data();
+	void Export_dot(string fileDot);
 private:
-	typedef map<string , int> DataRef; //string : URL cib, int : hits
+	typedef map<string , int> DataRef; //string : URL cible, int : hits
 	DataRef dataRef;
 	typedef map<string , pair<DataRef , int>> DataCibRef; 
-	// string : URL cible, string de DataRef : URL ref  
-	// int de DataRef : nombre acces de ref->cib
-	// int : hits
+	// string : URL cible 
+	// string de DataRef : URL ref , int de DataRef : nombre acces de ref->cib
+	// int de pair : hits
 	// 
 	DataCibRef dataCibRef;
 	string fileName;
