@@ -19,6 +19,11 @@ void LogData::Insert_Cib(string cible) {
 	}
 }
 
+void LogData::Fetch_dataCib() {
+	for (auto i:dataRef) 
+		dataCib.insert(pair<int , string>(i.second , i.first));
+}
+
 void LogData::Insert_CibRef(string cible , string ref) {
 	try {
 		// cas : key cible existe deja dans dataCibRef
@@ -55,8 +60,11 @@ void LogData::Export_dot(string fileDot) {
 
 void LogData::Affiche_data(vector<string> & options , string fileDot) {
 	if (options.empty()) {
-		for(auto i:dataRef) 
-			cout << i.first << " (" << i.second << " hits)" << endl;
+		int i;
+		DataCib::reverse_iterator rit;
+		Fetch_dataCib();
+		for (rit = dataCib.rbegin() , i=0; rit != dataCib.rend() && i < 10; ++rit , ++i)
+			cout << rit->second << " (" << rit->first << " hits)" << endl;
 	}
 	else {
 		cout << "Dot-file " << fileDot << " generated" << endl;
@@ -69,7 +77,7 @@ void LogData::Affiche_data(vector<string> & options , string fileDot) {
 void LogData::Test_affiche_data() {
 	cout << "Cible" << '\t' << "Ref" << '\t' << "R->C" << '\t' << "hits" << endl;
 	for(auto i:dataCibRef) {
-		for (DataRef::iterator j = i.second.first.begin() ; j != i.second.first.end() ; j++)
+		for (DataRef::iterator j = i.second.first.begin() ; j != i.second.first.end() ; ++j)
 			cout << i.first << '\t' << j->first <<  '\t' 
 			<< j->second << '\t' << i.second.second << endl;
 	}

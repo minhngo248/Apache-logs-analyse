@@ -7,7 +7,6 @@
 #include <stdexcept>      // std::out_of_range
 #include <map>
 #include <vector>
-#include <iterator>
 class LogData 
 {
 public:
@@ -19,8 +18,12 @@ public:
 	void Insert_CibRef(string cible , string ref);
 	void Affiche_data(vector<string> & options , string fileDot = "");
 	void Test_affiche_data();
-	void Export_dot(string fileDot);
+	
 private:
+	void Fetch_dataCib();
+	void Export_dot(string fileDot);
+	typedef multimap<int , string> DataCib; // pour le cas de sans option
+	DataCib dataCib; 
 	typedef map<string , int> DataRef; //string : URL cible, int : hits
 	DataRef dataRef;
 	typedef map<string , pair<DataRef , int>> DataCibRef; 
