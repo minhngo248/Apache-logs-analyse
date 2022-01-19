@@ -9,12 +9,14 @@ LogData::LogData(string unFileName) {
 LogData::~LogData() {
 }
 
-void LogData::Get_info(const string & unLog , string & heure , string & cible, string & formatCib, string & ref) {
-	string hour;	
+void LogData::Get_info(const string & unLog ,string & heure , string & cible, 
+						string & formatCib, string & ref, string & formatRef) {	
 	size_t found, found1, found2, sz;
+	string stringBase("http://intranet-if.insa-lyon.fr");
 	found = unLog.find(':');
 	found1 = unLog.find(':', found+1);
 	heure.assign(unLog, found+1, found1-found-1);
+	
 	/*-----------*/
 	found = unLog.find('\"', found1+1);
 	found = unLog.find(' ', found+1);
@@ -28,6 +30,17 @@ void LogData::Get_info(const string & unLog , string & heure , string & cible, s
 	found = unLog.find('\"', found+1);
 	found1 = unLog.find('\"', found+1);
 	ref.assign(unLog, found+1, found1-found-1);
+	found = ref.find(stringBase);
+	if (found != string::npos) {
+		ref.erase(0 , stringBase.length());
+		found1 = ref.find('.');
+		formatRef.assign(ref, found1 + 1);
+	}
+	else {
+		formatRef = "\n";
+	}
+	cout << ref << endl;
+	cout << formatRef << endl;
 } 
 
 /*void LogData::Insert_Cib(string cible) {
@@ -75,7 +88,8 @@ void LogData::export_dot(string fileDot) {
 	ofstream fic;
 	fic.open(fileDot);
 	fic << "digraph {" << endl;
-	/*-------- pas fini --------*/
+	
+	fic<< "}";
 	fic.close();
 }
 
