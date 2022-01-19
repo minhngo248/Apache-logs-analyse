@@ -9,6 +9,27 @@ LogData::LogData(string unFileName) {
 LogData::~LogData() {
 }
 
+void LogData::Line_Manager (string & unLog, bool optionG, bool optionE, bool optionT, string fileDot, string uneHeure) {
+	bool formatCibNonPris, formatRefNonPris;
+	string heure, cible, formatCib, ref, formatRef;
+	Get_info(unLog, heure, cible, formatCib, ref, formatRef);
+	
+	if (optionT && heure.compare(uneHeure) != 0) {
+		return;
+	}
+	
+	if (optionE) {
+		formatCibNonPris = (formatCib == "jpg") || (formatCib == "css") || (formatCib == "js");
+		formatRefNonPris = (formatRef == "jpg") || (formatRef == "css") || (formatRef == "js");
+		if (formatCibNonPris || formatRefNonPris) {
+			return;
+		}
+	}
+	
+	Insert_CibRef(cible , ref);	
+	
+}
+
 void LogData::Get_info(const string & unLog ,string & heure , string & cible, 
 						string & formatCib, string & ref, string & formatRef) {	
 	size_t found, found1, found2, sz;
@@ -39,19 +60,8 @@ void LogData::Get_info(const string & unLog ,string & heure , string & cible,
 	else {
 		formatRef = "\n";
 	}
-	cout << ref << endl;
-	cout << formatRef << endl;
 } 
 
-/*void LogData::Insert_Cib(string cible) {
-	try {
-		int hits = dataRef.at(cible);
-		dataRef.at(cible) = hits+1;
-	}
-	catch (const std::out_of_range& oor) {
-		dataRef.insert(pair<string , int>(cible , 1));
-	}
-} */
 
 void LogData::fetch_dataCib() {
 	for (auto i:dataCibRef) 
@@ -91,7 +101,11 @@ void LogData::export_dot(string fileDot) {
 	DataRef::iterator it1;
 	typedef multimap<int, pair<string, string>> UnMultimap;
 	UnMultimap unMultimap; 
+	
 	fic.open(fileDot);
+	
+	cout << fileDot << endl;
+	
 	fic << "digraph {" << endl;
 	int i, j = -1;
 	for (it = dataCibRef.begin() , i = j+1 ; it != dataCibRef.end() ; ++it) {
@@ -111,15 +125,14 @@ void LogData::export_dot(string fileDot) {
 	fic.close();
 }
 
-void LogData::Affiche_data(vector<string> & options , string fileDot) {
-	if (options.empty()) {
-		int i;
-		DataCib::reverse_iterator rit;
-		fetch_dataCib();
-		for (rit = dataCib.rbegin() , i=0; rit != dataCib.rend() && i < 10; ++rit , ++i)
-			cout << rit->second << " (" << rit->first << " hits)" << endl;
-	}
-	else {
+void LogData::Affiche_data(string fileDot) {
+	int i;
+	DataCib::reverse_iterator rit;
+	fetch_dataCib();
+	for (rit = dataCib.rbegin() , i=0; rit != dataCib.rend() && i < 10; ++rit , ++i)
+		cout << rit->second << " (" << rit->first << " hits)" << endl;
+	
+	if (fileDot.compare("") !=0) {
 		cout << "Dot-file " << fileDot << " generated" << endl;
 		for(auto i:dataCibRef) 
 			cout << i.first << " (" << i.second.second << " hits)" << endl;
