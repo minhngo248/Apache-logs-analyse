@@ -85,10 +85,28 @@ void LogData::Insert_CibRef(string cible , string ref) {
 }
 
 void LogData::export_dot(string fileDot) {
-	ofstream fic;
+	string unString1, unString2;
+	ofstream fic;	
+	DataCibRef::iterator it;
+	DataRef::iterator it1;
+	typedef multimap<int, pair<string, string>> UnMultimap;
+	UnMultimap unMultimap; 
 	fic.open(fileDot);
 	fic << "digraph {" << endl;
-	
+	int i, j = -1;
+	for (it = dataCibRef.begin() , i = j+1 ; it != dataCibRef.end() ; ++it) {
+		fic << "node" << i << " [label = \"" << it->first << "\"];" << endl;
+		for (it1 = it->second.first.begin() , j = i+1 ; it1 !=  it->second.first.end() ; ++it1 , ++j)
+		{
+			fic << "node" << j << " [label = \"" << it1->first << "\"];" << endl;
+			unString1 = "node";		unString1.append(to_string(i));
+			unString2 = "node";		unString2.append(to_string(j));
+			unMultimap.insert(pair<int, pair<string, string>>(it1->second, pair<string, string>(unString2, unString1)));
+		}
+	}
+	for(auto elem:unMultimap) {
+		fic << elem.second.first << " -> " << elem.second.second << "[label = " << elem.first << endl;
+	}
 	fic<< "}";
 	fic.close();
 }
