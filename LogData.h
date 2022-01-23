@@ -16,6 +16,12 @@
 #include <fstream>
 #include <stdexcept>      // std::out_of_range
 #include <map>
+
+//------------------------------------------------------------------ Types
+typedef multimap<int, string> DataCib;
+typedef map<string , int> DataRef; 
+typedef map<string , pair<DataRef , int>> DataCibRef; 
+
 //------------------------------------------------------------------------ 
 // Rôle de la classe <LogData>
 //
@@ -24,37 +30,39 @@
 class LogData {
 //----------------------------------------------------------------- PUBLIC
 public:
+	friend void Get_info(const string & unLog, string& heure, 
+				string& cible, string& formatCib, string& ref, string& formatRef);
+	friend void Fetch_dataCib(LogData & logData);
+	friend void Export_dot(LogData & logData);
+	friend void Insert_CibRef(LogData & logData, string cible, string ref);
+	
 //----------------------------------------------------- Méthodes publiques	
-	void Line_Manager (string & unLog, bool optionG, bool optionE, bool optionT, string fileDot, string uneHeure);
+	void Line_Manager(const string & unLog, bool optionG, bool optionE, bool optionT, string uneHeure);
 	// type Méthode ( liste des paramètres );
     // Mode d'emploi :
     //
     // Contrat :
     //
-	void Insert_CibRef(string cible , string ref);
-	void Affiche_data(string fileDot = "");
-	//-------------------------------------------- Constructeurs - destructeur
-	LogData(string unFileName);
-	LogData(const LogData&);
+    
+//------------------------------------------------- Surcharge d'opérateurs
+	friend ostream & operator<<(ostream & out, LogData & logData);
+	
+//-------------------------------------------- Constructeurs - destructeur
+	LogData(string unFileName, string unFileDot);
 	~LogData();
+	
 //------------------------------------------------------------------ PRIVE	
 private:
-//------------------------------------------------------- Méthodes privées	
-	void get_info(const string & unLog, string& heure, 
-				string& cible, string& formatCib, string& ref, string& formatRef);
-	void fetch_dataCib();
-	void export_dot(string fileDot);
-//----------------------------------------------------- Attributs prives
-	typedef multimap<int , string> DataCib; // pour le cas de sans option
-	DataCib dataCib; 
-	typedef map<string , int> DataRef; //string : URL cible, int : hits
-	typedef map<string , pair<DataRef , int>> DataCibRef; 
+
+//------------------------------------------------------ Attributs privées
+	DataCib dataCib; //string : URL cible, int : hits
+	DataCibRef dataCibRef;
 	// string : URL cible 
 	// string de DataRef : URL ref , int de DataRef : nombre acces de ref->cib
 	// int de pair : hits
-	// 
-	DataCibRef dataCibRef;
+	//
 	string fileName;
+	string fileDot;
 };
 
 #endif // ! defined (LOG_DATA_H)

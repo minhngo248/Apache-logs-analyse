@@ -15,11 +15,8 @@ using namespace std;
 
 
 int main(int argc , char* argv[]) {
-	LogData logs(argv[argc-1]);
 	ifstream fic;
 	fic.open(argv[argc-1]);
-	
-	
 	string heure = "";
 	string unLog, unString, fileDot = "";
 	bool optionG = false, optionT = false, optionE = false;
@@ -38,13 +35,14 @@ int main(int argc , char* argv[]) {
 			heure = string(argv[i+1]);
 		}
 	}
+	LogData logs(argv[argc-1] , fileDot);
 	
 	while (!fic.eof()) {
 		getline(fic , unLog);
-		logs.Line_Manager(unLog, optionG, optionE, optionT, fileDot, heure);		
+		logs.Line_Manager(unLog, optionG, optionE, optionT, heure);		
 	}	
 	
-	logs.Affiche_data(fileDot);
+	cout << logs;
 	
 	fic.close();
 	return 0;

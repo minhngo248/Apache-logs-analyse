@@ -15,79 +15,10 @@
 using namespace std;
 #include "LogData.h"
 
-//----------------------------------------------------------------- PUBLIC
+//----------------------------------------------------------------- PUBLIC	
 
-//----------------------------------------------------- Méthodes publiques
-void LogData::Line_Manager (string & unLog, bool optionG, bool optionE, bool optionT, string fileDot, string uneHeure) {
-// Algorithme :
-//
-//
-// 
-	bool formatCibNonPris, formatRefNonPris;
-	string heure, cible, formatCib, ref, formatRef;
-	get_info(unLog, heure, cible, formatCib, ref, formatRef);
-	
-	if (optionT && heure.compare(uneHeure) != 0) {
-		return;
-	}
-	
-	if (optionE) {
-		formatCibNonPris = (formatCib == "jpg") || (formatCib == "css") || (formatCib == "js");
-		formatRefNonPris = (formatRef == "jpg") || (formatRef == "css") || (formatRef == "js");
-		if (formatCibNonPris || formatRefNonPris) {
-			return;
-		}
-	}
-	
-	Insert_CibRef(cible , ref);	
-} //----- Fin de Méthode
-
-void LogData::Insert_CibRef(string cible , string ref) {
-// Algorithme :
-//
-//
-//
-	try {
-		// cas : key cible existe deja dans dataCibRef
-		pair<DataRef,int> unPair;
-		unPair = dataCibRef.at(cible);
-		int hits = dataCibRef.at(cible).second;
-		dataCibRef.at(cible).second = hits+1;
-		try {
-			//cas : key ref existe deja dans dataRef
-			int nbCibRef = dataCibRef.at(cible).first.at(ref);
-			dataCibRef.at(cible).first.at(ref) = nbCibRef+1;
-		}
-		catch (const std::out_of_range& oor1) {
-			// cas : key ref n'existe pas encore dans dataRef
-			dataCibRef.at(cible).first.insert(pair<string,int>(ref , 1));
-		}
-	}
-	catch (const std::out_of_range& oor) {
-		// cas : key cible n'existe pas encore dans dataCibRef
-		pair<DataRef,int> unPair;
-		unPair.first.insert(pair<string,int>(ref , 1));
-		unPair.second = 1; // hits = 1 
-		dataCibRef.insert(pair<string,pair<DataRef,int>>(cible , unPair));
-	}
-} //----- Fin de Méthode
-
-void LogData::Affiche_data(string fileDot) {
-	int i;
-	DataCib::reverse_iterator rit;
-	fetch_dataCib();
-	if (fileDot.compare("") !=0) {
-		cout << "Dot-file " << fileDot << " generated" << endl;
-		export_dot(fileDot);
-	}
-	for (rit = dataCib.rbegin() , i=0; rit != dataCib.rend() && i < 10; ++rit , ++i)
-		cout << rit->second << " (" << rit->first << " hits)" << endl;	
-}
-
-//------------------------------------------------------------------ PRIVE	
-
-//------------------------------------------------------- Méthodes privées
-void LogData::get_info(const string & unLog ,string & heure , string & cible, 
+//------------------------------------------------------------------------
+void Get_info(const string & unLog ,string & heure , string & cible, 
 						string & formatCib, string & ref, string & formatRef) {	
 // Algorithme :
 //
@@ -121,20 +52,20 @@ void LogData::get_info(const string & unLog ,string & heure , string & cible,
 	else {
 		formatRef = "";
 	}
-} //----- Fin de Méthode
+} //----- Fin de Fonction ordinaire
 
-void LogData::fetch_dataCib() {
+void Fetch_dataCib(LogData & logData) {
 // Algorithme :
 //
 //
 // 	
-	for (auto i:dataCibRef) 
-		dataCib.insert(pair<int , string>(i.second.second , i.first));
-} //----- Fin de Méthode
+	for (auto i:logData.dataCibRef) 
+		logData.dataCib.insert(pair<int , string>(i.second.second , i.first));
+} //----- Fin de Fonction ordinaire
 
 
 
-void LogData::export_dot(string fileDot) {
+void Export_dot(LogData & logData) {
 // Algorithme :
 //
 //
@@ -153,10 +84,10 @@ void LogData::export_dot(string fileDot) {
 	int cibPos;
 	int refPos;
 	
-	fic.open(fileDot);
+	fic.open(logData.fileDot);
 	
 	fic << "digraph {" << endl;
-	for (it = dataCibRef.begin() ; it != dataCibRef.end() ; ++it) {
+	for (it = logData.dataCibRef.begin() ; it != logData.dataCibRef.end() ; ++it) {
 		inserted = (mapN.insert(pair<string, int>(it->first, mapN.size()))).second;
 		cibPos = mapN.at(it->first);
 		if (inserted) {
@@ -181,11 +112,81 @@ void LogData::export_dot(string fileDot) {
 	}
 	fic<< "}";
 	fic.close();
+} //----- Fin de Fonction ordinaire
+
+void Insert_CibRef(LogData & logData , string cible , string ref) {
+// Algorithme :
+//
+//
+//
+	try {
+		// cas : key cible existe deja dans dataCibRef
+		pair<DataRef,int> unPair;
+		unPair = logData.dataCibRef.at(cible);
+		int hits = logData.dataCibRef.at(cible).second;
+		logData.dataCibRef.at(cible).second = hits+1;
+		try {
+			//cas : key ref existe deja dans dataRef
+			int nbCibRef = logData.dataCibRef.at(cible).first.at(ref);
+			logData.dataCibRef.at(cible).first.at(ref) = nbCibRef+1;
+		}
+		catch (const std::out_of_range& oor1) {
+			// cas : key ref n'existe pas encore dans dataRef
+			logData.dataCibRef.at(cible).first.insert(pair<string,int>(ref , 1));
+		}
+	}
+	catch (const std::out_of_range& oor) {
+		// cas : key cible n'existe pas encore dans dataCibRef
+		pair<DataRef,int> unPair;
+		unPair.first.insert(pair<string,int>(ref , 1));
+		unPair.second = 1; // hits = 1 
+		logData.dataCibRef.insert(pair<string,pair<DataRef,int>>(cible , unPair));
+	}
+} //----- Fin de Fonction ordinaire
+
+//----------------------------------------------------- Méthodes publiques
+void LogData::Line_Manager(const string & unLog, bool optionG, bool optionE, bool optionT, string uneHeure) {
+// Algorithme :
+//
+//
+// 
+	bool formatCibNonPris, formatRefNonPris;
+	string heure, cible, formatCib, ref, formatRef;
+	Get_info(unLog, heure, cible, formatCib, ref, formatRef);
+	
+	if (optionT && heure.compare(uneHeure) != 0) {
+		return;
+	}
+	
+	if (optionE) {
+		formatCibNonPris = (formatCib == "jpg") || (formatCib == "css") || (formatCib == "js");
+		formatRefNonPris = (formatRef == "jpg") || (formatRef == "css") || (formatRef == "js");
+		if (formatCibNonPris || formatRefNonPris) {
+			return;
+		}
+	}
+	Insert_CibRef(*this, cible , ref);	
 } //----- Fin de Méthode
 
+//------------------------------------------------- Surcharge d'opérateurs
+
+ostream & operator<<(ostream & out, LogData & logData) {
+	int i;
+	DataCib::reverse_iterator rit;
+	Fetch_dataCib(logData);
+	if (logData.fileDot.compare("") != 0) {
+		out << "Dot-file " << logData.fileDot << " generated" << endl;
+		Export_dot(logData);
+	}
+	for (rit = logData.dataCib.rbegin() , i=0; rit != logData.dataCib.rend() && i < 10; ++rit , ++i)
+		out << rit->second << " (" << rit->first << " hits)" << endl;
+	return out;	
+} //----- Fin de operator <<
+
 //-------------------------------------------- Constructeurs - destructeur
-LogData::LogData(string unFileName) {
+LogData::LogData(string unFileName, string unFileDot) {
 	this->fileName = unFileName;
+	this->fileDot = unFileDot;
 #ifdef MAP
     cout << "Appel au constructeur de <LogData>" << endl;
 #endif
