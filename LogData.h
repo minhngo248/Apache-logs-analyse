@@ -30,12 +30,6 @@ typedef map<string , pair<DataRef , int>> DataCibRef;
 class LogData {
 //----------------------------------------------------------------- PUBLIC
 public:
-	friend void Get_info(const string & unLog, string& heure, 
-				string& cible, string& formatCib, string& ref, string& formatRef);
-	friend void Fetch_dataCib(LogData & logData);
-	friend void Export_dot(LogData & logData);
-	friend void Insert_CibRef(LogData & logData, string cible, string ref);
-	
 //----------------------------------------------------- Méthodes publiques	
 	void Line_Manager(const string & unLog, bool optionG, bool optionE, bool optionT, string uneHeure);
 	// type Méthode ( liste des paramètres );
@@ -45,15 +39,21 @@ public:
     //
     
 //------------------------------------------------- Surcharge d'opérateurs
-	friend ostream & operator<<(ostream & out, LogData & logData);
+	friend ostream & operator<<(ostream & out, LogData & unLog);
 	
 //-------------------------------------------- Constructeurs - destructeur
 	LogData(string unFileName, string unFileDot);
+	LogData(const LogData & unLog);
 	~LogData();
 	
 //------------------------------------------------------------------ PRIVE	
 private:
-
+//------------------------------------------------------- Méthodes privées	
+	void get_info(const string & unLog, string& heure, 
+				string& cible, string& formatCib, string& ref, string& formatRef);
+	void fetch_dataCib();
+	void export_dot();
+	void insert_CibRef(string cible, string ref);
 //------------------------------------------------------ Attributs privées
 	DataCib dataCib; //string : URL cible, int : hits
 	DataCibRef dataCibRef;
