@@ -62,10 +62,7 @@ ostream & operator<<(ostream & out, LogData & unLog) {
 
 void LogData::get_info(const string & unLog ,string & heure , string & cible, 
 						string & formatCib, string & ref, string & formatRef) {	
-// Algorithme :
-//
-//
-// 						
+												
 	size_t found, found1, found2, sz;
 	string stringBase("http://intranet-if.insa-lyon.fr");
 	found = unLog.find(':');
@@ -97,28 +94,20 @@ void LogData::get_info(const string & unLog ,string & heure , string & cible,
 } //----- Fin de Methode
 
 void LogData::fetch_dataCib() {
-// Algorithme :
-//
-//
-// 	
 	for (auto i:dataCibRef) 
 		dataCib.insert(pair<int , string>(i.second.second , i.first));
 } //----- Fin de Methode
 
-void LogData::export_dot() {
-// Algorithme :
-//
-//
-// 	
+void LogData::export_dot() {	
 	string unString1, unString2;
 	ofstream fic;	
 	
 	DataCibRef::iterator it;
 	DataRef::iterator it1;
 	
-	typedef multimap<int, pair<string, string>> MapLiens;
+	typedef multimap<int, pair<string, string>> MapLiens;		//ce map est pour stocker tous les liens entre 2 URLs.
 	MapLiens mapL; 
-	typedef map <string, int> MapNodes;
+	typedef map <string, int> MapNodes;		//ce map est pour vérifier si l'URL existe déjà.
 	MapNodes mapN;
 	bool inserted;
 	int cibPos;
@@ -141,8 +130,10 @@ void LogData::export_dot() {
 				fic << "node" << refPos << " [label = \"" << it1->first << "\"];" << endl;
 			}
 			
-			unString1 = "node";		unString1.append(to_string(cibPos));
-			unString2 = "node";		unString2.append(to_string(refPos));
+			unString1 = "node";		
+			unString1.append(to_string(cibPos));
+			unString2 = "node";		
+			unString2.append(to_string(refPos));
 			mapL.insert(pair<int, pair<string, string>>(it1->second, pair<string, string>(unString2, unString1)));
 		}
 	}
@@ -155,10 +146,6 @@ void LogData::export_dot() {
 } //----- Fin de Methode
 
 void LogData::insert_CibRef(string cible , string ref) {
-// Algorithme :
-//
-//
-//
 	try {
 		// cas : key cible existe deja dans dataCibRef
 		pair<DataRef,int> unPair;

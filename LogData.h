@@ -33,10 +33,9 @@ public:
 //----------------------------------------------------- Méthodes publiques	
 	void Line_Manager(const string & unLog, bool optionG, bool optionE, bool optionT, string uneHeure);
 	// type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
+    
+    // Mode d'emploi : A partir de chaque ligne dans le fichier log, cette méthode extrait
+    // les informations nécessaires et les ajoute dans notre structure de données si possible
     
 //------------------------------------------------- Surcharge d'opérateurs
 	friend ostream & operator<<(ostream & out, LogData & unLog);
