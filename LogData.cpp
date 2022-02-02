@@ -25,25 +25,31 @@ void LogData::Line_Manager(const string & unLog, bool optionG, bool optionE, boo
 // 
 	bool formatCibNonPris, formatRefNonPris;
 	string heure, cible, formatCib, ref, formatRef;
-	get_info(unLog, heure, cible, formatCib, ref, formatRef);
+	if (unLog.compare("") != 0) {
 	
-	if (optionT && heure.compare(uneHeure) != 0) {
-		return;
-	}
-	
-	if (optionE) {
-		formatCibNonPris = (formatCib == "jpg") || (formatCib == "css") || (formatCib == "js");
-		formatRefNonPris = (formatRef == "jpg") || (formatRef == "css") || (formatRef == "js");
-		if (formatCibNonPris || formatRefNonPris) {
+		get_info(unLog, heure, cible, formatCib, ref, formatRef);
+		if (optionT && heure.compare(uneHeure) != 0) {
 			return;
 		}
+	
+		if (optionE) {
+			formatCibNonPris = (formatCib == "jpg") || (formatCib == "css") || (formatCib == "js");
+			formatRefNonPris = (formatRef == "jpg") || (formatRef == "css") || (formatRef == "js");
+			if (formatCibNonPris || formatRefNonPris) {
+				return;
+			}
+		}
+		insert_CibRef(cible , ref);
 	}
-	insert_CibRef(cible , ref);	
 } //----- Fin de Méthode
 
 //------------------------------------------------- Surcharge d'opérateurs
 
 ostream & operator<<(ostream & out, LogData & unLog) {
+// Algorithme : affiche les 10 valeurs situées en fin de multimap 
+// DataCib
+//
+// 	
 	int i;
 	DataCib::reverse_iterator rit;
 	unLog.fetch_dataCib();
@@ -97,8 +103,8 @@ void LogData::get_info(const string & unLog ,string & heure , string & cible,
 } //----- Fin de Methode
 
 void LogData::fetch_dataCib() {
-// Algorithme :
-//
+// Algorithme : insérer les valeurs de map DataCibRef dans le multimap DataCib
+// les clés sont triées en ordre croissant dans le multimap DataCib
 //
 // 	
 	for (auto i:dataCibRef) 

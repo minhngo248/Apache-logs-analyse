@@ -42,7 +42,7 @@ int main(int argc , char* argv[]) {
 		logs.Line_Manager(unLog, optionG, optionE, optionT, heure);		
 	}	
 	
-	cout << logs << endl;
+	cout << logs;
 	
 	fic.close();
 	return 0;

@@ -32,14 +32,17 @@ class LogData {
 public:
 //----------------------------------------------------- Méthodes publiques	
 	void Line_Manager(const string & unLog, bool optionG, bool optionE, bool optionT, string uneHeure);
-	// type Méthode ( liste des paramètres );
-    // Mode d'emploi :
+    // Mode d'emploi : 
     //
-    // Contrat :
+    // 
     //
     
 //------------------------------------------------- Surcharge d'opérateurs
 	friend ostream & operator<<(ostream & out, LogData & unLog);
+	// Mode d'emploi : affiche les URL cibles et le nombre de clics selon
+    // option de ligne de commandes
+    // 
+    //
 	
 //-------------------------------------------- Constructeurs - destructeur
 	LogData(string unFileName, string unFileDot);
@@ -51,8 +54,20 @@ private:
 //------------------------------------------------------- Méthodes privées	
 	void get_info(const string & unLog, string& heure, 
 				string& cible, string& formatCib, string& ref, string& formatRef);
+	// Mode d'emploi : prendre les attributs dans une ligne de log
+    //
+    // 
+    //
 	void fetch_dataCib();
+	// Mode d'emploi : entrée les valeurs dans le multimap DataCib
+    //
+    // 
+    //
 	void export_dot();
+	// Mode d'emploi : exporter le fichier .dot
+    //
+    // 
+    //
 	void insert_CibRef(string cible, string ref);
 //------------------------------------------------------ Attributs privées
 	DataCib dataCib; //string : URL cible, int : hits
