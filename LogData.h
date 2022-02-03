@@ -32,13 +32,13 @@ class LogData {
 public:
 //----------------------------------------------------- Méthodes publiques	
 	void Line_Manager(const string & unLog, bool optionG, bool optionE, bool optionT, string uneHeure);
-    // Mode d'emploi : 
-    //
+    // Mode d'emploi : A partir de chaque ligne dans le fichier log, cette méthode extrait
+    // les informations nécessaires et les ajoute dans notre structure de données si possible
     // 
     //
     
 //------------------------------------------------- Surcharge d'opérateurs
-	friend ostream & operator<<(ostream & out, LogData & unLog);
+	friend ostream & operator<<(ostream & out, LogData & unLog) ;
 	// Mode d'emploi : affiche les URL cibles et le nombre de clics selon
     // option de ligne de commandes
     // 

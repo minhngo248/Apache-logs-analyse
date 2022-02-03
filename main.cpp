@@ -16,7 +16,16 @@ using namespace std;
 
 int main(int argc , char* argv[]) {
 	ifstream fic;
-	fic.open(argv[argc-1]);
+	if (argc <2) {
+		std::cerr << "Erreur: Vous avez oublie le fichier log" << endl;
+		return 1;
+	}else if (string(argv[argc-1]).find(".log") == string::npos) {
+		std::cerr << "Erreur: Vous avez oublie le fichier log" << endl;
+		return 1;
+	}else{
+		fic.open(argv[argc-1]);
+	}
+	
 	string heure = "";
 	string unLog, unString, fileDot = "";
 	bool optionG = false, optionT = false, optionE = false;
@@ -26,6 +35,10 @@ int main(int argc , char* argv[]) {
 		if (unString == "-g") {
 			optionG = true;
 			fileDot = string(argv[i+1]);
+			if (unString.find(".dot") == string::npos || unString.find(".txt") == string::npos) {
+				std::cerr << "Erreur: Vous avez oublie le fichier dot" << endl;
+				return 1;
+			}
 		}
 		if (unString == "-e") {
 			optionE = true;
@@ -33,6 +46,10 @@ int main(int argc , char* argv[]) {
 		if (unString == "-t") {
 			optionT = true;
 			heure = string(argv[i+1]);
+			if (stoi(heure) <0 || stoi(heure) >23) {
+				std::cerr << "Erreur: Heure invalide" << endl;
+				return 1;
+			}
 		}
 	}
 	LogData logs(argv[argc-1] , fileDot);
