@@ -1,1 +1,2 @@
-cat fichier.txt >sortie.txt
+../bin/analog -g fichier.dot ../bin/A.log;
+cat fichier.dot >sortie.txt;

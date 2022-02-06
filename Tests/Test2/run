@@ -1,1 +1,3 @@
-cat 
+../bin/analog -g A.dot ../bin/A.log;
+cat <A.dot>std.in;
+cat

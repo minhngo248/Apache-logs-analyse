@@ -1,1 +1,4 @@
-cat fichier.txt >sortie.txt && echo "essai" >sortie2.txt
+../bin/analog -e -g fichier1.dot ../bin/A.log;
+cat fichier1.dot >sortie.txt;
+../bin/analog -t 11 -g fichier2.dot ../bin/A.log;
+cat fichier2.dot >sortie2.txt

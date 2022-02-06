@@ -16,16 +16,20 @@ using namespace std;
 
 int main(int argc , char* argv[]) {
 	ifstream fic;
-	if (argc <2) {
-		std::cerr << "Erreur: Vous avez oublie le fichier log" << endl;
+	if (argc < 2) {
+		cerr << "Erreur : Vous avez oublie le fichier log" << endl;
 		return 1;
 	}else if (string(argv[argc-1]).find(".log") == string::npos) {
-		std::cerr << "Erreur: Vous avez oublie le fichier log" << endl;
+		cerr << "Erreur : Vous avez oublie le fichier log" << endl;
 		return 1;
 	}else{
 		fic.open(argv[argc-1]);
 	}
 	
+	if (!fic.is_open()) {
+		cerr << "Fichier n'existe pas" << endl;
+		return 1;
+	}
 	string heure = "";
 	string unLog, unString, fileDot = "";
 	bool optionG = false, optionT = false, optionE = false;
@@ -35,19 +39,19 @@ int main(int argc , char* argv[]) {
 		if (unString == "-g") {
 			optionG = true;
 			fileDot = string(argv[i+1]);
-			if (unString.find(".dot") == string::npos || unString.find(".txt") == string::npos) {
-				std::cerr << "Erreur: Vous avez oublie le fichier dot" << endl;
+			if (fileDot.find(".dot") == string::npos && fileDot.find(".txt") == string::npos) {
+				cerr << "Erreur : Vous avez oublie le fichier dot" << endl;
 				return 1;
 			}
 		}
-		if (unString == "-e") {
+		else if (unString == "-e") {
 			optionE = true;
 		}
-		if (unString == "-t") {
+		else if (unString == "-t") {
 			optionT = true;
 			heure = string(argv[i+1]);
 			if (stoi(heure) <0 || stoi(heure) >23) {
-				std::cerr << "Erreur: Heure invalide" << endl;
+				cerr << "Erreur : Heure invalide" << endl;
 				return 1;
 			}
 		}

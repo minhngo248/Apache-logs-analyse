@@ -26,7 +26,6 @@ void LogData::Line_Manager(const string & unLog, bool optionG, bool optionE, boo
 	bool formatCibNonPris, formatRefNonPris;
 	string heure, cible, formatCib, ref, formatRef;
 	if (unLog.compare("") != 0) {
-	
 		get_info(unLog, heure, cible, formatCib, ref, formatRef);
 		if (optionT && heure.compare(uneHeure) != 0) {
 			return;
