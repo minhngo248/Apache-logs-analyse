@@ -50,7 +50,13 @@ int main(int argc , char* argv[]) {
 		else if (unString == "-t") {
 			optionT = true;
 			heure = string(argv[i+1]);
-			if (stoi(heure) <0 || stoi(heure) >23) {
+			try {
+				if (stoi(heure) < 0 || stoi(heure) > 23) {
+					cerr << "Erreur : Heure invalide" << endl;
+					return 1;
+				}
+			}
+			catch (const std::invalid_argument & ia) {
 				cerr << "Erreur : Heure invalide" << endl;
 				return 1;
 			}

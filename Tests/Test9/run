@@ -1,0 +1,1 @@
+../bin/analog -g T.doc ../bin/A.log & echo $? > returncode

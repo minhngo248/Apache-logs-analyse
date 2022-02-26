@@ -1,0 +1,1 @@
+../bin/analog -t 1a ../bin/A.log & echo $? > returncode
